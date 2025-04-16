@@ -1,0 +1,4 @@
+<button width="100" height="50" position="-250 -200 0">Strike</button>
+<button width="100" height="50" position="-125 -200 0">Parry</button>
+<button width="100" height="50" position="125 -200 0">Strike</button>
+<button width="100" height="50" position="250 -200 0">Parry</button>
