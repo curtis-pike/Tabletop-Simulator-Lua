@@ -1,4 +1,58 @@
-<button width="100" height="50" position="-250 -200 0">Strike</button>
-<button width="100" height="50" position="-125 -200 0">Parry</button>
-<button width="100" height="50" position="125 -200 0">Strike</button>
-<button width="100" height="50" position="250 -200 0">Parry</button>
+<HorizontalLayout height="30" width="490" position="0 -120 -10">
+  <Button onClick="onStrike1">Strike (Normal)</Button>
+  <Button onClick="onBlock1">Block (Normal)</Button>
+  <Button onClick="onStrike2">Strike (Normal)</Button>
+  <Button onClick="onBlock2">Block (Normal)</Button>
+</HorizontalLayout>
+
+<HorizontalLayout height="30" width="490" position="0 -90 -10">
+  <Button onClick="onCritStrike1">Strike (Crit)</Button>
+  <Button onClick="onCritBlock1">Block (Crit)</Button>
+  <Button onClick="onCritStrike2">Strike (Crit)</Button>
+  <Button onClick="onCritBlock2">Block (Crit)</Button>
+</HorizontalLayout>
+
+<VerticalLayout height="200" width="100" position="-205 15 -10" scale="0.7">
+  <Toggle textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
+  <Toggle textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
+    <Dropdown id="Lethal" onValueChanged="foobar">
+      <Option>Lethal X</Option>
+      <Option>Lethal 5+</Option>
+      <Option>Lethal 4+</Option>
+      <Option>Lethal 3+</Option>
+      <Option>Lethal 2+</Option>
+  </Dropdown>
+  <Dropdown id="Other Rules" onValueChanged="foobar">
+    <Option>Additional</Option>
+    <Option>Repress</Option>
+
+  </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout height="180" width="45" position="-100 30 -10" spacing="15">
+  <Button>8</Button>
+  <Button>0</Button>
+  <Button>0</Button>
+</VerticalLayout>
+
+<Button id="wounds1" onClick="addWound1" height="30" width="30" position="-63 -45 -10">+1</Button>
+<Button onClick="addNormal1" height="30" width="30" position="-63 20 -10">+1</Button>
+<Button onClick="addCrit1" height="30" width="30" position="-63 85 -10">+1</Button>
+
+<Button onClick="suWound1" height="30" width="30" position="-137 -45 -10">-1</Button>
+<Button onClick="subNormal1" height="30" width="30" position="-137 20 -10">-1</Button>
+<Button onClick="subCrit1" height="30" width="30" position="-137 85 -10">-1</Button>
+
+<VerticalLayout height="180" width="45" position="100 30 -10" spacing="15">
+  <Button>8</Button>
+  <Button>0</Button>
+  <Button>0</Button>
+</VerticalLayout>
+
+<Button onClick="addWound2" height="30" width="30" position="137 -45 -10">+1</Button>
+<Button onClick="addNormal2" height="30" width="30" position="137 20 -10">+1</Button>
+<Button onClick="addCrit2" height="30" width="30" position="137 85 -10">+1</Button>
+
+<Button onClick="suWound2" height="30" width="30" position="63 -45 -10">-1</Button>
+<Button onClick="subNormal2" height="30" width="30" position="63 20 -10">-1</Button>
+<Button onClick="subCrit2" height="30" width="30" position="63 85 -10">-1</Button>

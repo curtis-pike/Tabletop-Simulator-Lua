@@ -1,0 +1,23 @@
+-- GLOBALS --
+
+MIN_WOUND = 0
+MAX_WOUND = 21
+
+MIN_CRITS = 0
+MAX_CRITS = 5
+
+MIN_NORMALS = 0
+MAX_NORMALS = 5
+
+-- END OF GLOBALS --
+
+-- FUNCTIONS --
+
+function add(number, obj)
+  obj = obj + number
+end
+
+function addWound1()
+  curr = getValue("wounds1") + 1
+  setValue("wounds1", curr)
+end
