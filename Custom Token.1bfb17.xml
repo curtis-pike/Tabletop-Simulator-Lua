@@ -1,58 +1,76 @@
-<HorizontalLayout height="30" width="490" position="0 -120 -10">
+<HorizontalLayout height="30" width="490" position="0 120 -10" rotation="0 0 180">
   <Button onClick="onStrike1">Strike (Normal)</Button>
   <Button onClick="onBlock1">Block (Normal)</Button>
   <Button onClick="onStrike2">Strike (Normal)</Button>
   <Button onClick="onBlock2">Block (Normal)</Button>
 </HorizontalLayout>
 
-<HorizontalLayout height="30" width="490" position="0 -90 -10">
+<HorizontalLayout height="30" width="490" position="0 90 -10" rotation="0 0 180">
   <Button onClick="onCritStrike1">Strike (Crit)</Button>
   <Button onClick="onCritBlock1">Block (Crit)</Button>
   <Button onClick="onCritStrike2">Strike (Crit)</Button>
   <Button onClick="onCritBlock2">Block (Crit)</Button>
 </HorizontalLayout>
 
-<VerticalLayout height="200" width="100" position="-205 15 -10" scale="0.7">
-  <Toggle textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
-  <Toggle textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
-    <Dropdown id="Lethal" onValueChanged="foobar">
-      <Option>Lethal X</Option>
-      <Option>Lethal 5+</Option>
-      <Option>Lethal 4+</Option>
-      <Option>Lethal 3+</Option>
-      <Option>Lethal 2+</Option>
-  </Dropdown>
-  <Dropdown id="Other Rules" onValueChanged="foobar">
+<VerticalLayout height="200" width="100" position="-205 -15 -10" scale="0.7" rotation="0 0 180">
+  <Toggle id="brutal1" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
+  <Toggle id="shock1" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
+  <Dropdown id="otherRules1" onValueChanged="foobar">
     <Option>Additional</Option>
     <Option>Repress</Option>
-
   </Dropdown>
 </VerticalLayout>
 
-<VerticalLayout height="180" width="45" position="-100 30 -10" spacing="15">
-  <Button>8</Button>
-  <Button>0</Button>
-  <Button>0</Button>
+<VerticalLayout height="200" width="100" position="205 -15 -10" scale="0.7" rotation="0 0 180">
+  <Toggle id="brutal2" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
+  <Toggle id="shock2" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
+  <Dropdown id="otherRules2" onValueChanged="foobar">
+    <Option>Additional</Option>
+    <Option>Repress</Option>
+  </Dropdown>
 </VerticalLayout>
 
-<Button id="wounds1" onClick="addWound1" height="30" width="30" position="-63 -45 -10">+1</Button>
-<Button onClick="addNormal1" height="30" width="30" position="-63 20 -10">+1</Button>
-<Button onClick="addCrit1" height="30" width="30" position="-63 85 -10">+1</Button>
 
-<Button onClick="suWound1" height="30" width="30" position="-137 -45 -10">-1</Button>
-<Button onClick="subNormal1" height="30" width="30" position="-137 20 -10">-1</Button>
-<Button onClick="subCrit1" height="30" width="30" position="-137 85 -10">-1</Button>
-
-<VerticalLayout height="180" width="45" position="100 30 -10" spacing="15">
-  <Button>8</Button>
-  <Button>0</Button>
-  <Button>0</Button>
+<VerticalLayout height="180" width="45" position="-100 -30 -10" spacing="15" rotation="0 0 180">
+  <Button onClick="modifyWounds1"></Button>
+  <Button onClick="modifyNormals1"></Button>
+  <Button onClick="modifyCrits1"></Button>
 </VerticalLayout>
 
-<Button onClick="addWound2" height="30" width="30" position="137 -45 -10">+1</Button>
-<Button onClick="addNormal2" height="30" width="30" position="137 20 -10">+1</Button>
-<Button onClick="addCrit2" height="30" width="30" position="137 85 -10">+1</Button>
+<VerticalLayout height="180" width="45" position="-100 -30 -10" spacing="15" rotation="0 0 180">
+  <Text id="wounds1">8</Text>
+  <Text id="normals1">0</Text>
+  <Text id="crits1">0</Text>
+</VerticalLayout>
 
-<Button onClick="suWound2" height="30" width="30" position="63 -45 -10">-1</Button>
-<Button onClick="subNormal2" height="30" width="30" position="63 20 -10">-1</Button>
-<Button onClick="subCrit2" height="30" width="30" position="63 85 -10">-1</Button>
+<VerticalLayout height="180" width="45" position="100 -30 -10" spacing="15" rotation="0 0 180">
+  <Button onClick="modifyWounds2"></Button>
+  <Button onClick="modifyNormals2"></Button>
+  <Button onClick="modifyCrits2"></Button>
+</VerticalLayout>
+
+<VerticalLayout height="180" width="45" position="100 -30 -10" spacing="15" rotation="0 0 180">
+  <Text id="wounds2">8</Text>
+  <Text id="normals2">0</Text>
+  <Text id="crits2">0</Text>
+</VerticalLayout>
+
+<VerticalLayout height="95" width="30" position="-142 3 -10" spacing="35" rotation="0 0 180">
+  <Button onClick="modifyNormalDamage1"></Button>
+  <Button onClick="modifyCritDamage1"></Button>
+</VerticalLayout>
+
+<VerticalLayout height="95" width="30" position="-142 3 -10" spacing="35" rotation="0 0 180">
+  <Text id="normalDamage1">3</Text>
+  <Text id="critDamage1">4</Text>
+</VerticalLayout>
+
+<VerticalLayout height="95" width="30" position="142 3 -10" spacing="35" rotation="0 0 180">
+  <Button onClick="modifyNormalDamage2"></Button>
+  <Button onClick="modifyCritDamage2"></Button>
+</VerticalLayout>
+
+<VerticalLayout height="95" width="30" position="142 3 -10" spacing="35" rotation="0 0 180">
+  <Text id="normalDamage2">3</Text>
+  <Text id="critDamage2">4</Text>
+</VerticalLayout>

@@ -1,7 +1,8 @@
 -- GLOBALS --
+RIGHT_CLICK = "-2"
 
-MIN_WOUND = 0
-MAX_WOUND = 21
+MIN_WOUNDS = 0
+MAX_WOUNDS = 21
 
 MIN_CRITS = 0
 MAX_CRITS = 5
@@ -9,15 +10,197 @@ MAX_CRITS = 5
 MIN_NORMALS = 0
 MAX_NORMALS = 5
 
+MIN_NORMAL_DAMAGE = 1
+MAX_NORMAL_DAMAGE = 6
+
+MIN_CRIT_DAMAGE = 1
+MAX_CRIT_DAMAGE = 7
+
 -- END OF GLOBALS --
 
 -- FUNCTIONS --
 
-function add(number, obj)
-  obj = obj + number
+-- HELPERS --
+function addTo(id, value)
+  local curr = self.UI.getValue(id)
+  local new = curr + value
+  return new
 end
 
-function addWound1()
-  curr = getValue("wounds1") + 1
-  setValue("wounds1", curr)
+function addWounds(id, value)
+  local new = addTo(id, value)
+  self.UI.setValue(id, math.min(MAX_WOUNDS, math.max(new, MIN_WOUNDS)))
 end
+
+function addCrits(id, value)
+  local new = addTo(id, value)
+  self.UI.setValue(id, math.min(MAX_CRITS, math.max(new, MIN_CRITS)))
+end
+
+function addNormals(id, value)
+  local new = addTo(id, value)
+  self.UI.setValue(id, math.min(MAX_NORMALS, math.max(new, MIN_NORMALS)))
+end
+
+function addNormalDamage(id, value)
+  local new = addTo(id, value)
+  self.UI.setValue(id, math.min(MAX_NORMAL_DAMAGE, math.max(new, MIN_NORMAL_DAMAGE)))
+end
+
+function addCritDamage(id, value)
+  local new = addTo(id, value)
+  self.UI.setValue(id, math.min(MAX_CRIT_DAMAGE, math.max(new, MIN_CRIT_DAMAGE)))
+end
+
+function addWounds1()
+  addWounds("wounds1", 1)
+end
+function subWounds1()
+  addWounds("wounds1", -1)
+end
+function addWounds2()
+  addWounds("wounds2", 1)
+end
+function subWounds2()
+  addWounds("wounds2", -1)
+end
+
+function addCrits1()
+  addCrits("crits1", 1)
+end
+function subCrits1()
+  addCrits("crits1", -1)
+end
+function addCrits2()
+  addCrits("crits2", 1)
+end
+function subCrits2()
+  addCrits("crits2", -1)
+end
+
+function addNormals1()
+  addNormals("normals1", 1)
+end
+function subNormals1()
+  addNormals("normals1", -1)
+end
+function addNormals2()
+  addNormals("normals2", 1)
+end
+function subNormals2()
+  addNormals("normals2", -1)
+end
+
+function addCritDamage1()
+  addCritDamage("critDamage1", 1)
+end
+function subCritDamage1()
+  addCritDamage("critDamage1", -1)
+end
+function addCritDamage2()
+  addCritDamage("critDamage2", 1)
+end
+function subCritDamage2()
+  addCritDamage("critDamage2", -1)
+end
+
+function addNormalDamage1()
+  addNormalDamage("normalDamage1", 1)
+end
+function subNormalDamage1()
+  addNormalDamage("normalDamage1", -1)
+end
+function addNormalDamage2()
+  addNormalDamage("normalDamage2", 1)
+end
+function subNormalDamage2()
+  addNormalDamage("normalDamage2", -1)
+end
+
+
+-- END OF HELPERS --
+
+-- BUTTON FUNCTION CALLS --
+
+function modifyWounds1(player, click)
+  if click == RIGHT_CLICK then
+    subWounds1()
+  else
+    addWounds1()
+  end
+end
+
+function modifyWounds2(player, click)
+  if click == RIGHT_CLICK then
+    subWounds2()
+  else
+    addWounds2()
+  end
+end
+
+function modifyCrits1(player, click)
+  if click == RIGHT_CLICK then
+    subCrits1()
+  else
+    addCrits1()
+  end
+end
+
+function modifyCrits2(player, click)
+  if click == RIGHT_CLICK then
+    subCrits2()
+  else
+    addCrits2()
+  end
+end
+
+function modifyNormals1(player, click)
+  if click == RIGHT_CLICK then
+    subNormals1()
+  else
+    addNormals1()
+  end
+end
+
+function modifyNormals2(player, click)
+  if click == RIGHT_CLICK then
+    subNormals2()
+  else
+    addNormals2()
+  end
+end
+
+function modifyCritDamage1(player, click)
+  if click == RIGHT_CLICK then
+    subCritDamage1()
+  else
+    addCritDamage1()
+  end
+end
+function modifyCritDamage2(player, click)
+  if click == RIGHT_CLICK then
+    subCritDamage2()
+  else
+    addCritDamage2()
+  end
+end
+
+function modifyNormalDamage1(player, click)
+  if click == RIGHT_CLICK then
+    subNormalDamage1()
+  else
+    addNormalDamage1()
+  end
+end
+function modifyNormalDamage2(player, click)
+  if click == RIGHT_CLICK then
+    subNormalDamage2()
+  else
+    addNormalDamage2()
+  end
+end
+
+
+
+-- END OF BUTTON FUNCTION CALLS --
+-- END OF FUNCTIONS
