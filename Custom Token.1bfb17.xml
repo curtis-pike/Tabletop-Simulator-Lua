@@ -1,15 +1,15 @@
 <GridLayout height="30" width="245" position="-265 50 -10" rotation="0 0 180" cellSize="100 25" constraint="FixedColumnCount" constraintCount="1">
-  <Button onClick="normalStrike(1)">Strike (Crit)</Button>
-  <Button onClick="normalParry(1)">Parry (Crit)</Button>
-  <Button onClick="critStrike(1)" fontsize="12">Strike (Normal)</Button>
-  <Button onClick="critParry(1)" fontsize="12">Parry (Normal)</Button>
+  <Button onClick="normalStrike(1)" fontsize="12">Strike (Normal)</Button>
+  <Button onClick="normalParry(1)" fontsize="12">Parry (Normal)</Button>
+  <Button onClick="critStrike(1)">Strike (Crit)</Button>
+  <Button onClick="critParry(1)">Parry (Crit)</Button>
 </GridLayout>
 
 <GridLayout height="30" width="245" position="120 50 -10" rotation="0 0 180" cellSize="100 25" constraint="FixedColumnCount" constraintCount="1">
-  <Button onClick="normalStrike(2)">Strike (Crit)</Button>
-  <Button onClick="normalParry(2)">Parry (Crit)</Button>
-  <Button onClick="critStrike(2)" fontsize="12">Strike (Normal)</Button>
-  <Button onClick="critParry(2)" fontsize="12">Parry (Normal)</Button>
+  <Button onClick="normalStrike(2)" fontsize="12">Strike (Normal)</Button>
+  <Button onClick="normalParry(2)" fontsize="12">Parry (Normal)</Button>
+  <Button onClick="critStrike(2)">Strike (Crit)</Button>
+  <Button onClick="critParry(2)">Parry (Crit)</Button>
 </GridLayout>
 
 <GridLayout height="1" width="1" position="-140 -100 -10" cellSize="100 15" spacing="5" constraint="FixedColumnCount" constraintCount="1" rotation="0 0 180">
