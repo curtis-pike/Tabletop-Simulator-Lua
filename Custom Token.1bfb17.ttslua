@@ -11,7 +11,7 @@ MIN_NORMALS = 0
 MAX_NORMALS = 5
 
 MIN_NORMAL_DAMAGE = 1
-MAX_NORMAL_DAMAGE = 6
+MAX_NORMAL_DAMAGE = 5
 
 MIN_CRIT_DAMAGE = 1
 MAX_CRIT_DAMAGE = 7
@@ -116,7 +116,6 @@ end
 function subNormalDamage2()
   addNormalDamage("normalDamage2", -1)
 end
-
 
 -- END OF HELPERS --
 
