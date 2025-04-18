@@ -16,11 +16,34 @@ MAX_NORMAL_DAMAGE = 5
 MIN_CRIT_DAMAGE = 1
 MAX_CRIT_DAMAGE = 7
 
+MIN_HIT = 2
+MAX_HIT = 6
+
 -- END OF GLOBALS --
 
 -- FUNCTIONS --
 
 -- HELPERS --
+function checkBoundsX(a, b)
+  local a_min = a.getBounds().center.x - a.getBounds().size.x/2
+  local a_max = a.getBounds().center.x + a.getBounds().size.x/2
+  local b_x = b.getBounds().center.x
+  if(a_min < b_x and b_x < a_max) then
+    return true
+  end
+  return false
+end
+
+function checkBoundsZ(a, b)
+  local a_min = a.getBounds().center.z - a.getBounds().size.z/2
+  local a_max = a.getBounds().center.z + a.getBounds().size.z/2
+  local b_z = b.getBounds().center.z
+  if(a_min < b_z and b_z < a_max) then
+    return true
+  end
+  return false
+end
+
 function addTo(id, value)
   local curr = self.UI.getValue(id)
   local new = curr + value
@@ -50,6 +73,11 @@ end
 function addCritDamage(id, value)
   local new = addTo(id, value)
   self.UI.setValue(id, math.min(MAX_CRIT_DAMAGE, math.max(new, MIN_CRIT_DAMAGE)))
+end
+
+function addHit(id, value)
+  local new = string.sub(self.UI.getValue(id), 1, 1) + value
+  self.UI.setValue(id, math.min(MAX_HIT, math.max(new, MIN_HIT)) .. "+")
 end
 
 function addWounds1()
@@ -115,6 +143,20 @@ function addNormalDamage2()
 end
 function subNormalDamage2()
   addNormalDamage("normalDamage2", -1)
+end
+
+function addHit1()
+  addHit("hit1", 1)
+end
+function subHit1()
+  addHit("hit1", -1)
+end
+
+function addHit2()
+  addHit("hit2", 1)
+end
+function subHit2()
+  addHit("hit2", -1)
 end
 
 -- END OF HELPERS --
@@ -199,7 +241,43 @@ function modifyNormalDamage2(player, click)
   end
 end
 
+function modifyHit1(player, click)
+  if click == RIGHT_CLICK then
+    subHit1()
+  else
+    addHit1()
+  end
+end
 
+function modifyHit2(player, click)
+  if click == RIGHT_CLICK then
+    subHit2()
+  else
+    addHit2()
+  end
+end
+
+function modifyLethalX1(player, value)
+  self.UI.setValue("lethalx1text", value)
+  self.UI.setAttribute("lethalx1text", "offsetXY", (6-value)*16 .. " 0")
+end
+
+function modifyLethalX2(player, value)
+  self.UI.setValue("lethalx2text", value)
+  self.UI.setAttribute("lethalx2text", "offsetXY", (6-value)*16 .. " 0")
+end
+
+function test()
+  print("test")
+  local objects = getAllObjects()
+  for index, object in pairs(objects) do
+    if object.tag == "Dice" then
+      if checkBoundsX(self, object) and checkBoundsZ(self, object) then
+        print(object.getValue())
+      end
+    end
+  end
+end
 
 -- END OF BUTTON FUNCTION CALLS --
 -- END OF FUNCTIONS
