@@ -52,7 +52,8 @@
 <Button onClick="modifyCrits2" height="50" width="50" position="115 110 -10" rotation="0 0 180"></Button>
 <Text id="crits2" fontSize="18" height="50" width="50" position="115 110 -10" color="Red" rotation="0 0 180">0</Text>
 
-<GridLayout height="1" width="1" position="-108 -135 -10" cellSize="30 30" spacing="5" constraint="FixedRowCount" constraintCount="1" rotation="0 0 180">
+<GridLayout height="1" width="1" position="-72 -135 -10" cellSize="30 30" spacing="5" constraint="FixedRowCount" constraintCount="1" rotation="0 0 180">
+  <Button onClick="SpawnDice1"></Button>
   <Button onClick="modifyAttacks1"></Button>
   <Button onClick="modifyHit1"></Button>
   <Button onClick="modifyNormalDamage1"></Button>
@@ -71,6 +72,7 @@
   <Button onClick="modifyHit2"></Button>
   <Button onClick="modifyNormalDamage2"></Button>
   <Button onClick="modifyCritDamage2"></Button>
+  <Button onClick="SpawnDice2"></Button>
 </GridLayout>
 
 <GridLayout height="1" width="1" position="240 -135 -10" cellSize="30 30" spacing="5" constraint="FixedRowCount" constraintCount="1" rotation="0 0 180">

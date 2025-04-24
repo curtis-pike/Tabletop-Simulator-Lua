@@ -279,5 +279,22 @@ function test()
   end
 end
 
+function SpawnDice1()
+  print("SpawnDice1()")
+  pos=self.getPosition()
+  pos.y = 5
+  spawnObject({type="Die_6", position=pos})
+  local objects = getAllObjects()
+  for index, object in pairs(objects) do
+    if object.tag == "Dice" and object.getColorTint() == "White" then
+      if checkBoundsX(self, object) and checkBoundsZ(self, object) then
+        destroyObject(object)
+      end
+    end
+  end
+
+
+end
+
 -- END OF BUTTON FUNCTION CALLS --
 -- END OF FUNCTIONS
