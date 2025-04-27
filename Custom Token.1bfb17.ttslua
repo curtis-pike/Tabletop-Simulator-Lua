@@ -60,12 +60,6 @@ function checkBoundsZ(a, b)
   return false
 end
 
-function addTo(id, value)
-  local curr = self.UI.getValue(id)
-  local new = curr + value
-  return new
-end
-
 -- takes click type, red/blue, string index from STATS_TABLE, and value
 function addValueToStat(player, click, id, stat_index, value)
   -- concat the stat string with the player id (1 or 2)
@@ -79,13 +73,13 @@ function addValueToStat(player, click, id, stat_index, value)
   local new = curr + value
   -- set the new value
   self.UI.setValue(str, math.min(MAX_TABLE[stat_index], math.max(new, MIN_TABLE[stat_index])))
-end
+end -- addValueToStat()
 
-function modifyAttack1(player, click)
+function modifyAttacks1(player, click)
   addValueToStat(player, click, BLUE_PLAYER, ATTACK_INDEX, 1)
 end
 
-function modifyAttack2(player, click)
+function modifyAttacks2(player, click)
   addValueToStat(player, click, RED_PLAYER, ATTACK_INDEX, 1)
 end
 
@@ -162,18 +156,28 @@ end
 
 function SpawnDice1()
   print("SpawnDice1()")
-  pos=self.getPosition()
-  pos.y = 5
-  spawnObject({type="Die_6", position=pos})
+  local pos=self.getPosition()
+  pos.x = pos.x + 4
+  pos.y = pos.y + 5
+  pos.z = pos.z + 4
+
   local objects = getAllObjects()
   for index, object in pairs(objects) do
-    if object.tag == "Dice" and object.getColorTint() == "White" then
+    if object.tag == "Dice" then
       if checkBoundsX(self, object) and checkBoundsZ(self, object) then
         destroyObject(object)
       end
     end
   end
 
+  for i=1,self.UI.getValue("attacks1") do
+    pos.z = pos.z - 1
+    if i == 4 then
+      pos.z = pos.z + 3
+      pos.x = pos.x + 1
+    end
+    spawnObject({type="Die_6", position=pos, rotation={-90, 0, 0}}).setColorTint("Blue")
+  end
 
 end
 
