@@ -1,23 +1,39 @@
 -- GLOBALS --
 RIGHT_CLICK = "-2"
+BLUE_PLAYER = 1
+RED_PLAYER = 2
 
-MIN_WOUNDS = 0
-MAX_WOUNDS = 21
+ATTACK_INDEX = 1
+MIN_ATTACK = 1
+MAX_ATTACK = 6
 
-MIN_CRITS = 0
-MAX_CRITS = 5
+HIT_INDEX = 2
+MIN_HIT = 2
+MAX_HIT = 6
 
-MIN_NORMALS = 0
-MAX_NORMALS = 5
-
+NORMAL_DAMAGE_INDEX = 3
 MIN_NORMAL_DAMAGE = 1
 MAX_NORMAL_DAMAGE = 5
 
+CRIT_DAMAGE_INDEX = 4
 MIN_CRIT_DAMAGE = 1
 MAX_CRIT_DAMAGE = 7
 
-MIN_HIT = 2
-MAX_HIT = 6
+WOUNDS_INDEX = 5
+MIN_WOUNDS = 0
+MAX_WOUNDS = 21
+
+NORMALS_INDEX = 6
+MIN_NORMALS = 0
+MAX_NORMALS = 5
+
+CRITS_INDEX = 7
+MIN_CRITS = 0
+MAX_CRITS = 5
+
+STATS_TABLE = {"attacks", "hit", "normalDamage", "critDamage", "wounds", "normals", "crits"}
+MIN_TABLE = {MIN_ATTACK, MIN_HIT, MIN_NORMAL_DAMAGE, MIN_CRIT_DAMAGE, MIN_WOUNDS, MIN_NORMALS, MIN_CRITS}
+MAX_TABLE = {MAX_ATTACK, MAX_HIT, MAX_NORMAL_DAMAGE, MAX_CRIT_DAMAGE, MAX_WOUNDS, MAX_NORMALS, MAX_CRITS}
 
 -- END OF GLOBALS --
 
@@ -50,212 +66,77 @@ function addTo(id, value)
   return new
 end
 
-function addWounds(id, value)
-  local new = addTo(id, value)
-  self.UI.setValue(id, math.min(MAX_WOUNDS, math.max(new, MIN_WOUNDS)))
-end
-
-function addCrits(id, value)
-  local new = addTo(id, value)
-  self.UI.setValue(id, math.min(MAX_CRITS, math.max(new, MIN_CRITS)))
-end
-
-function addNormals(id, value)
-  local new = addTo(id, value)
-  self.UI.setValue(id, math.min(MAX_NORMALS, math.max(new, MIN_NORMALS)))
-end
-
-function addNormalDamage(id, value)
-  local new = addTo(id, value)
-  self.UI.setValue(id, math.min(MAX_NORMAL_DAMAGE, math.max(new, MIN_NORMAL_DAMAGE)))
-end
-
-function addCritDamage(id, value)
-  local new = addTo(id, value)
-  self.UI.setValue(id, math.min(MAX_CRIT_DAMAGE, math.max(new, MIN_CRIT_DAMAGE)))
-end
-
-function addHit(id, value)
-  local new = string.sub(self.UI.getValue(id), 1, 1) + value
-  self.UI.setValue(id, math.min(MAX_HIT, math.max(new, MIN_HIT)) .. "+")
-end
-
-function addWounds1()
-  addWounds("wounds1", 1)
-end
-function subWounds1()
-  addWounds("wounds1", -1)
-end
-function addWounds2()
-  addWounds("wounds2", 1)
-end
-function subWounds2()
-  addWounds("wounds2", -1)
-end
-
-function addCrits1()
-  addCrits("crits1", 1)
-end
-function subCrits1()
-  addCrits("crits1", -1)
-end
-function addCrits2()
-  addCrits("crits2", 1)
-end
-function subCrits2()
-  addCrits("crits2", -1)
-end
-
-function addNormals1()
-  addNormals("normals1", 1)
-end
-function subNormals1()
-  addNormals("normals1", -1)
-end
-function addNormals2()
-  addNormals("normals2", 1)
-end
-function subNormals2()
-  addNormals("normals2", -1)
-end
-
-function addCritDamage1()
-  addCritDamage("critDamage1", 1)
-end
-function subCritDamage1()
-  addCritDamage("critDamage1", -1)
-end
-function addCritDamage2()
-  addCritDamage("critDamage2", 1)
-end
-function subCritDamage2()
-  addCritDamage("critDamage2", -1)
-end
-
-function addNormalDamage1()
-  addNormalDamage("normalDamage1", 1)
-end
-function subNormalDamage1()
-  addNormalDamage("normalDamage1", -1)
-end
-function addNormalDamage2()
-  addNormalDamage("normalDamage2", 1)
-end
-function subNormalDamage2()
-  addNormalDamage("normalDamage2", -1)
-end
-
-function addHit1()
-  addHit("hit1", 1)
-end
-function subHit1()
-  addHit("hit1", -1)
-end
-
-function addHit2()
-  addHit("hit2", 1)
-end
-function subHit2()
-  addHit("hit2", -1)
-end
-
--- END OF HELPERS --
-
--- BUTTON FUNCTION CALLS --
-
-function modifyWounds1(player, click)
+-- takes click type, red/blue, string index from STATS_TABLE, and value
+function addValueToStat(player, click, id, stat_index, value)
+  -- concat the stat string with the player id (1 or 2)
+  local str = STATS_TABLE[stat_index]..tostring(id)
+  -- pull the current value
+  local curr = self.UI.getValue(str)
+  -- if right click, make it subtract instead of add
   if click == RIGHT_CLICK then
-    subWounds1()
-  else
-    addWounds1()
+    value = -value
   end
+  local new = curr + value
+  -- set the new value
+  self.UI.setValue(str, math.min(MAX_TABLE[stat_index], math.max(new, MIN_TABLE[stat_index])))
 end
 
-function modifyWounds2(player, click)
-  if click == RIGHT_CLICK then
-    subWounds2()
-  else
-    addWounds2()
-  end
+function modifyAttack1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, ATTACK_INDEX, 1)
 end
 
-function modifyCrits1(player, click)
-  if click == RIGHT_CLICK then
-    subCrits1()
-  else
-    addCrits1()
-  end
-end
-
-function modifyCrits2(player, click)
-  if click == RIGHT_CLICK then
-    subCrits2()
-  else
-    addCrits2()
-  end
-end
-
-function modifyNormals1(player, click)
-  if click == RIGHT_CLICK then
-    subNormals1()
-  else
-    addNormals1()
-  end
-end
-
-function modifyNormals2(player, click)
-  if click == RIGHT_CLICK then
-    subNormals2()
-  else
-    addNormals2()
-  end
-end
-
-function modifyCritDamage1(player, click)
-  if click == RIGHT_CLICK then
-    subCritDamage1()
-  else
-    addCritDamage1()
-  end
-end
-function modifyCritDamage2(player, click)
-  if click == RIGHT_CLICK then
-    subCritDamage2()
-  else
-    addCritDamage2()
-  end
-end
-
-function modifyNormalDamage1(player, click)
-  if click == RIGHT_CLICK then
-    subNormalDamage1()
-  else
-    addNormalDamage1()
-  end
-end
-function modifyNormalDamage2(player, click)
-  if click == RIGHT_CLICK then
-    subNormalDamage2()
-  else
-    addNormalDamage2()
-  end
+function modifyAttack2(player, click)
+  addValueToStat(player, click, RED_PLAYER, ATTACK_INDEX, 1)
 end
 
 function modifyHit1(player, click)
-  if click == RIGHT_CLICK then
-    subHit1()
-  else
-    addHit1()
-  end
+  addValueToStat(player, click, BLUE_PLAYER, HIT_INDEX, 1)
 end
 
 function modifyHit2(player, click)
-  if click == RIGHT_CLICK then
-    subHit2()
-  else
-    addHit2()
-  end
+  addValueToStat(player, click, RED_PLAYER, HIT_INDEX, 1)
 end
+
+function modifyNormalDamage1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, NORMAL_DAMAGE_INDEX, 1)
+end
+
+function modifyNormalDamage2(player, click)
+  addValueToStat(player, click, RED_PLAYER, NORMAL_DAMAGE_INDEX, 1)
+end
+
+function modifyCritDamage1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, CRIT_DAMAGE_INDEX, 1)
+end
+
+function modifyCritDamage2(player, click)
+  addValueToStat(player, click, RED_PLAYER, CRIT_DAMAGE_INDEX, 1)
+end
+
+function modifyWounds1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, WOUNDS_INDEX, 1)
+end
+
+function modifyWounds2(player, click)
+  addValueToStat(player, click, RED_PLAYER, WOUNDS_INDEX, 1)
+end
+
+function modifyNormals1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, NORMALS_INDEX, 1)
+end
+
+function modifyNormals2(player, click)
+  addValueToStat(player, click, RED_PLAYER, NORMALS_INDEX, 1)
+end
+
+function modifyCrits1(player, click)
+  addValueToStat(player, click, BLUE_PLAYER, CRITS_INDEX, 1)
+end
+
+function modifyCrits2(player, click)
+  addValueToStat(player, click, RED_PLAYER, CRITS_INDEX, 1)
+end
+
 
 function modifyLethalX1(player, value)
   self.UI.setValue("lethalx1text", value)
