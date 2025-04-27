@@ -1,39 +1,44 @@
 -- GLOBALS --
-RIGHT_CLICK = "-2"
-BLUE_PLAYER = 1
-RED_PLAYER = 2
+local RIGHT_CLICK = "-2"
+local BLUE_PLAYER = 1
+local RED_PLAYER = 2
 
-ATTACK_INDEX = 1
-MIN_ATTACK = 1
-MAX_ATTACK = 6
+local ATTACK_INDEX = 1
+local MIN_ATTACK = 1
+local MAX_ATTACK = 6
 
-HIT_INDEX = 2
-MIN_HIT = 2
-MAX_HIT = 6
+local HIT_INDEX = 2
+local MIN_HIT = 2
+local MAX_HIT = 6
 
-NORMAL_DAMAGE_INDEX = 3
-MIN_NORMAL_DAMAGE = 1
-MAX_NORMAL_DAMAGE = 5
+local NORMAL_DAMAGE_INDEX = 3
+local MIN_NORMAL_DAMAGE = 1
+local MAX_NORMAL_DAMAGE = 5
 
-CRIT_DAMAGE_INDEX = 4
-MIN_CRIT_DAMAGE = 1
-MAX_CRIT_DAMAGE = 7
+local CRIT_DAMAGE_INDEX = 4
+local MIN_CRIT_DAMAGE = 1
+local MAX_CRIT_DAMAGE = 7
 
-WOUNDS_INDEX = 5
-MIN_WOUNDS = 0
-MAX_WOUNDS = 21
+local WOUNDS_INDEX = 5
+local MIN_WOUNDS = 0
+local MAX_WOUNDS = 21
 
-NORMALS_INDEX = 6
-MIN_NORMALS = 0
-MAX_NORMALS = 5
+local NORMALS_INDEX = 6
+local MIN_NORMALS = 0
+local MAX_NORMALS = 5
 
-CRITS_INDEX = 7
-MIN_CRITS = 0
-MAX_CRITS = 5
+local CRITS_INDEX = 7
+local MIN_CRITS = 0
+local MAX_CRITS = 5
 
-STATS_TABLE = {"attacks", "hit", "normalDamage", "critDamage", "wounds", "normals", "crits"}
-MIN_TABLE = {MIN_ATTACK, MIN_HIT, MIN_NORMAL_DAMAGE, MIN_CRIT_DAMAGE, MIN_WOUNDS, MIN_NORMALS, MIN_CRITS}
-MAX_TABLE = {MAX_ATTACK, MAX_HIT, MAX_NORMAL_DAMAGE, MAX_CRIT_DAMAGE, MAX_WOUNDS, MAX_NORMALS, MAX_CRITS}
+local STATS_TABLE = {"attacks", "hit", "normalDamage", "critDamage", "wounds", "normals", "crits"}
+local MIN_TABLE = {MIN_ATTACK, MIN_HIT, MIN_NORMAL_DAMAGE, MIN_CRIT_DAMAGE, MIN_WOUNDS, MIN_NORMALS, MIN_CRITS}
+local MAX_TABLE = {MAX_ATTACK, MAX_HIT, MAX_NORMAL_DAMAGE, MAX_CRIT_DAMAGE, MAX_WOUNDS, MAX_NORMALS, MAX_CRITS}
+
+local X_SHIFT = {4,-6}
+local Z_SHIFT = {4,4}
+
+local COLOR_TABLE = {"Blue", "Red"}
 
 -- END OF GLOBALS --
 
@@ -154,29 +159,36 @@ function test()
   end
 end
 
-function SpawnDice1()
-  print("SpawnDice1()")
+function spawnDice1()
+  spawnDice(1)
+end
+
+function spawnDice2()
+  spawnDice(2)
+end
+
+function spawnDice(id)
   local pos=self.getPosition()
-  pos.x = pos.x + 4
+  pos.x = pos.x + X_SHIFT[id]
   pos.y = pos.y + 5
-  pos.z = pos.z + 4
+  pos.z = pos.z + Z_SHIFT[id]
 
   local objects = getAllObjects()
   for index, object in pairs(objects) do
-    if object.tag == "Dice" then
+    if object.tag == "Dice" and object.getColorTint() == Color.fromString(COLOR_TABLE[id])then
       if checkBoundsX(self, object) and checkBoundsZ(self, object) then
         destroyObject(object)
       end
     end
   end
 
-  for i=1,self.UI.getValue("attacks1") do
+  for i=1,self.UI.getValue("attacks"..tostring(id)) do
     pos.z = pos.z - 1
     if i == 4 then
       pos.z = pos.z + 3
       pos.x = pos.x + 1
     end
-    spawnObject({type="Die_6", position=pos, rotation={-90, 0, 0}}).setColorTint("Blue")
+    spawnObject({type="Die_6", position=pos, rotation={-90, 0, 0}}).setColorTint(COLOR_TABLE[id])
   end
 
 end
