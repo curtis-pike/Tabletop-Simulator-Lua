@@ -1,25 +1,43 @@
---Based off: https://steamcommunity.com/sharedfiles/filedetails/?id=726800282
---Link for this mod: https://steamcommunity.com/sharedfiles/filedetails/?id=959360907
--- Modified version to work with KTUI Dice Roller
---test change
 --Initialize Global Variables and pRNG Seed
 math.randomseed(tonumber(tostring(os.time()):reverse():sub(1,7))+tonumber(tostring(os.clock()):reverse():sub(1,7)))
-ver = 'BCB-2018-12-16-KTUI'
+ver = 'CEP-2025-05-05-KTF'
 
-lastHolder = {}
-sortedKeys = {}
 local matGuid = "1bfb17"
 local matObject = getObjectFromGUID(matGuid)
+local diceResultsTable = {0, 0, 0, 0, 0, 0}
+local matPos = matObject.getPosition()
+matPos.y = 5
+
+pos = matPos
 
 function onObjectEnterContainer(container, enter_object)
-	-- body...
 
-		print("here")
-		new = math.random(6)
-		print(new)
-		local pos=matObject.getPosition()
-		pos.y = 5
-		self.takeObject({position=pos})
-		enter_object.setRotationValue(new)
+	local enter_guid = enter_object.getGUID()
+	local allObjects = container.getObjects()
+	local roll = math.random(6)
+	--print(roll)
+	pos.z = roll
+	pos.x = matPos.x
+	print(pos.x)
 
+	local table = {position=pos}
+	self.takeObject(table)
+	local obj = getObjectFromGUID(enter_guid)
+	Wait.time(
+		function()
+			obj.setRotationValue(roll)
+		end, 0.5
+	)
+
+	diceResultsTable[roll] = diceResultsTable[roll] + 1
+	print(diceResultsTable)
+
+	Wait.time(reset, 1.5)
+
+end
+
+function reset()
+	print("reset")
+	diceResultsTable = {0, 0, 0, 0, 0, 0}
+	pos.x = matPos.x
 end
