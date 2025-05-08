@@ -40,6 +40,15 @@ local Z_SHIFT = {4,4}
 
 local COLOR_TABLE = {"Blue", "Red"}
 
+local ROTATION_TABLE = {
+	{-90, 0, 0}, --1
+	{0, 0, 0}, --2
+	{0, 0, -90}, --3
+	{0, 0, 90}, --4
+	{0, 0, 180}, --5
+	{90, 0, 0}, --6
+}
+
 -- END OF GLOBALS --
 
 -- FUNCTIONS --
@@ -136,7 +145,7 @@ function modifyCrits2(player, click)
   addValueToStat(player, click, RED_PLAYER, CRITS_INDEX, 1)
 end
 
-
+-- sets the lethal-x values offset X value, keeps Y offset to 0
 function modifyLethalX1(player, value)
   self.UI.setValue("lethalx1text", value)
   self.UI.setAttribute("lethalx1text", "offsetXY", (6-value)*16 .. " 0")
@@ -167,14 +176,17 @@ function spawnDice2()
   spawnDice(2)
 end
 
+-- takes the id (integer) of the player, BLUE_PLAYER (1) or RED_PLAYER (2)
 function spawnDice(id)
   local pos=self.getPosition()
   pos.x = pos.x + X_SHIFT[id]
   pos.y = pos.y + 5
   pos.z = pos.z + Z_SHIFT[id]
 
-  local objects = getAllObjects()
-  for index, object in pairs(objects) do
+  local allObjects = getAllObjects()
+
+  for index, object in pairs(allObjects) do
+    object.removeFromPlayerSelection(COLOR_TABLE[id])
     if object.tag == "Dice" and object.getColorTint() == Color.fromString(COLOR_TABLE[id])then
       if checkBoundsX(self, object) and checkBoundsZ(self, object) then
         destroyObject(object)
@@ -188,7 +200,9 @@ function spawnDice(id)
       pos.z = pos.z + 3
       pos.x = pos.x + 1
     end
-    spawnObject({type="Die_6", position=pos, rotation={-90, 0, 0}}).setColorTint(COLOR_TABLE[id])
+    local newDice = spawnObject({type="Die_6", position=pos, rotation=ROTATION_TABLE[1]})
+    newDice.setColorTint(COLOR_TABLE[id])
+    newDice.addToPlayerSelection(COLOR_TABLE[id])
   end
 
 end

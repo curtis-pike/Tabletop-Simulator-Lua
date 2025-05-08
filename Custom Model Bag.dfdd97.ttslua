@@ -4,40 +4,82 @@ ver = 'CEP-2025-05-05-KTF'
 
 local matGuid = "1bfb17"
 local matObject = getObjectFromGUID(matGuid)
-local diceResultsTable = {0, 0, 0, 0, 0, 0}
-local matPos = matObject.getPosition()
-matPos.y = 5
+local diceResultsTableBlue = {0, 0, 0, 0, 0, 0}
+local diceResultsTableRed = {0, 0, 0, 0, 0, 0}
+local diceResultsTableTable = {diceResultsTableBlue, diceResultsTableRed}
+local ROTATION_TABLE = {
+	{-90, 0, 0}, --1
+	{0, 0, 0}, --2
+	{0, 0, -90}, --3
+	{0, 0, 90}, --4
+	{0, 0, 180}, --5
+	{90, 0, 0}, --6
+}
+local COLOR_TABLE = {"Blue", "Red"}
+local X_OFFSET = {1,-7.5}
+local Z_OFFSET = {0,0}
+local pos = matObject.getPosition()
+pos.y = 5
 
-pos = matPos
-
+-- on dice entering, roll a number and prepare the dice placement
 function onObjectEnterContainer(container, enter_object)
 
+	-- store local data
 	local enter_guid = enter_object.getGUID()
-	local allObjects = container.getObjects()
-	local roll = math.random(6)
-	--print(roll)
-	pos.z = roll
-	pos.x = matPos.x
-	print(pos.x)
-
-	local table = {position=pos}
-	self.takeObject(table)
 	local obj = getObjectFromGUID(enter_guid)
+	local color = obj.getColorTint()
+
+	-- delete the dice put into the bag
+	if obj.type == "Dice" then
+		Wait.time(
+			function()
+				self.takeObject({guid=enter_guid, smooth=false, position={0,-10,0}})
+			end, 1
+		)
+		Wait.time(
+			function()
+				destroyObject(getObjectFromGUID(enter_guid))
+			end, 1.1
+		)
+	end
+
+	-- roll the dice
+	local roll = math.random(6)
+	print(roll)
+
+	-- add result to the corresponding table
+	if obj.getColorTint() ==  Color.fromString("Blue")then
+		diceResultsTableTable[1][roll] = diceResultsTableTable[1][roll] + 1
+	elseif obj.getColorTint() == Color.fromString("Red") then
+		diceResultsTableTable[2][roll] = diceResultsTableTable[2][roll] + 1
+	else
+		return
+	end
+
 	Wait.time(
 		function()
-			obj.setRotationValue(roll)
+			spawnNewDice()
 		end, 0.5
 	)
-
-	diceResultsTable[roll] = diceResultsTable[roll] + 1
-	print(diceResultsTable)
-
-	Wait.time(reset, 1.5)
-
 end
 
-function reset()
-	print("reset")
-	diceResultsTable = {0, 0, 0, 0, 0, 0}
-	pos.x = matPos.x
-end
+-- spawn new dice based on the values in the result tables
+function spawnNewDice()
+	for i=1,2 do
+		for number=1,6 do
+			local count = diceResultsTableTable[i][number]
+			-- reset parameters
+			local newparams = {type="Die_6", position=pos, smooth=false, rotation={0,0,0}}
+			-- set the x value to the roll result
+			newparams.rotation = ROTATION_TABLE[number]
+			-- however many times that result got rolled
+			for j=1, count do
+				newparams.position = {diceResultsTableTable[i][number]*0.7 + X_OFFSET[i], pos.y, number*0.7 + Z_OFFSET[i]}
+				diceResultsTableTable[i][number] = diceResultsTableTable[i][number] - 1
+				local newDice = spawnObject(newparams)
+				newDice.setColorTint(Color.fromString(COLOR_TABLE[i]))
+			end -- for3
+		end -- for2
+	end -- for1
+
+end -- function spawnNewDice()
