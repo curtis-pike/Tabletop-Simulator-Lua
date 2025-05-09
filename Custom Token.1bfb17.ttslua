@@ -1,4 +1,5 @@
 -- GLOBALS --
+local LEFT_CLICK = "-1"
 local RIGHT_CLICK = "-2"
 local BLUE_PLAYER = 1
 local RED_PLAYER = 2
@@ -103,7 +104,72 @@ function addValueToStat(player, click, id, stat_index, value)
 end -- addValueToStat()
 
 
-function modifyWeaponRule(player, isOn, id, a)
+function normalStrike(player, attacker)
+	attacker = tonumber(attacker)
+	local defender = 2
+	if attacker == 2 then
+		defender = 1
+	end
+	if tonumber(self.UI.getValue(STATS_TABLE[NORMALS_INDEX]..attacker)) > 0 then
+		local damage = self.UI.getValue(STATS_TABLE[NORMAL_DAMAGE_INDEX]..tostring(attacker))
+		addValueToStat(player, LEFT_CLICK, defender, WOUNDS_INDEX, -damage)
+		addValueToStat(player, LEFT_CLICK, attacker, NORMALS_INDEX, -1)
+	end
+end -- function normalStrike(player, target)
+
+function normalParry(player, attacker)
+	attacker = tonumber(attacker)
+	local defender = 2
+	if attacker == 2 then
+		defender = 1
+	end
+	if tonumber(self.UI.getValue(STATS_TABLE[NORMALS_INDEX]..attacker)) > 0 and self.UI.getAttribute(WEAPON_RULES_TABLE[BRUTAL_INDEX]..defender, "isOn") == "False" then
+		addValueToStat(player, LEFT_CLICK, defender, NORMALS_INDEX, -1)
+		addValueToStat(player, LEFT_CLICK, attacker, NORMALS_INDEX, -1)
+	end
+end -- function normalParry(player, target)
+
+function critStrike(player, attacker)
+	attacker = tonumber(attacker)
+	local defender = 2
+	if attacker == 2 then
+		defender = 1
+	end
+	if tonumber(self.UI.getValue(STATS_TABLE[CRITS_INDEX]..attacker)) > 0 then
+		-- shock weapon rule
+		if self.UI.getAttribute(WEAPON_RULES_TABLE[SHOCK_INDEX]..attacker, "isOn") == "True" then
+			modifyWeaponRule(player, "False", WEAPON_RULES_TABLE[SHOCK_INDEX]..attacker)
+			-- if no normals, block a crit
+			if tonumber(self.UI.getValue(STATS_TABLE[NORMALS_INDEX]..defender)) == 0 then
+				addValueToStat(player, LEFT_CLICK, defender, CRITS_INDEX, -1)
+			else -- block a normal otherwise
+				addValueToStat(player, LEFT_CLICK, defender, NORMALS_INDEX, -1)
+			end
+		end
+		local damage = self.UI.getValue(STATS_TABLE[CRIT_DAMAGE_INDEX]..tostring(attacker))
+		addValueToStat(player, LEFT_CLICK, defender, WOUNDS_INDEX, -damage)
+		addValueToStat(player, LEFT_CLICK, attacker, CRITS_INDEX, -1)
+	end
+end -- function critStrike(player, target)
+
+function critParry(player, attacker)
+	attacker = tonumber(attacker)
+	local defender = 2
+	if attacker == 2 then
+		defender = 1
+	end
+	if tonumber(self.UI.getValue(STATS_TABLE[CRITS_INDEX]..attacker)) > 0 then
+		-- block a normal if there are no crits to block
+		if tonumber(self.UI.getValue(STATS_TABLE[CRITS_INDEX]..defender)) == 0 then
+			addValueToStat(player, LEFT_CLICK, defender, NORMALS_INDEX, -1)
+		else -- block a crit with a crit if  there is a crit
+			addValueToStat(player, LEFT_CLICK, defender, CRITS_INDEX, -1)
+		end
+		addValueToStat(player, LEFT_CLICK, attacker, CRITS_INDEX, -1)
+	end
+end -- function critParry(player, target)
+
+function modifyWeaponRule(player, isOn, id)
 	self.UI.setAttribute(id, "isOn", isOn)
 end
 
@@ -173,18 +239,6 @@ end
 function modifyLethalX2(player, value)
   self.UI.setValue("lethalx2text", value)
   self.UI.setAttribute("lethalx2text", "offsetXY", (6-value)*16 .. " 0")
-end
-
-function test()
-  print("test")
-  local objects = getAllObjects()
-  for index, object in pairs(objects) do
-    if object.tag == "Dice" then
-      if checkBoundsX(self, object) and checkBoundsZ(self, object) then
-        print(object.getValue())
-      end
-    end
-  end
 end
 
 function fight(player, click)
@@ -293,8 +347,6 @@ function spawnDice(id)
     newDice.addToPlayerSelection(COLOR_TABLE[id])
   end
 end -- spawnDice(id)
-
-
 
 -- END OF BUTTON FUNCTION CALLS --
 -- END OF FUNCTIONS
