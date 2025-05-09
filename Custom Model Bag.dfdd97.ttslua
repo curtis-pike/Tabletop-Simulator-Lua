@@ -17,7 +17,7 @@ local ROTATION_TABLE = {
 }
 local COLOR_TABLE = {"Blue", "Red"}
 local X_OFFSET = {1,-7.5}
-local Z_OFFSET = {0,0}
+local Z_OFFSET = {-.25,-.25}
 local pos = matObject.getPosition()
 pos.y = 5
 
@@ -74,7 +74,7 @@ function spawnNewDice()
 			newparams.rotation = ROTATION_TABLE[number]
 			-- however many times that result got rolled
 			for j=1, count do
-				newparams.position = {diceResultsTableTable[i][number]*0.7 + X_OFFSET[i], pos.y, number*0.7 + Z_OFFSET[i]}
+				newparams.position = {diceResultsTableTable[i][number]*0.8 + X_OFFSET[i], pos.y, number*0.8 + Z_OFFSET[i]}
 				diceResultsTableTable[i][number] = diceResultsTableTable[i][number] - 1
 				local newDice = spawnObject(newparams)
 				newDice.setColorTint(Color.fromString(COLOR_TABLE[i]))

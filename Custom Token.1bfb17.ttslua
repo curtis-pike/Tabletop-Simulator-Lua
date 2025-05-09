@@ -49,6 +49,7 @@ local ROTATION_TABLE = {
 	{90, 0, 0}, --6
 }
 
+
 -- END OF GLOBALS --
 
 -- FUNCTIONS --
@@ -87,6 +88,9 @@ function addValueToStat(player, click, id, stat_index, value)
   local new = curr + value
   -- set the new value
   self.UI.setValue(str, math.min(MAX_TABLE[stat_index], math.max(new, MIN_TABLE[stat_index])))
+	if stat_index == HIT_INDEX then
+		self.UI.setValue(str, math.min(MAX_TABLE[stat_index], math.max(new, MIN_TABLE[stat_index])).."+")
+	end
 end -- addValueToStat()
 
 function modifyAttacks1(player, click)
@@ -99,6 +103,7 @@ end
 
 function modifyHit1(player, click)
   addValueToStat(player, click, BLUE_PLAYER, HIT_INDEX, 1)
+
 end
 
 function modifyHit2(player, click)
@@ -168,6 +173,50 @@ function test()
   end
 end
 
+function fight(player, click)
+	print("fight!")
+	local brutal = {self.UI.getAttribute("brutal1", "isOn"), self.UI.getAttribute("brutal2", "isOn")}
+	local shock = {self.UI.getAttribute("shock1", "isOn"), self.UI.getAttribute("shock2", "isOn")}
+	local rending = {self.UI.getAttribute("rending1", "isOn"), self.UI.getAttribute("rending2", "isOn")}
+	local punishing = {self.UI.getAttribute("punishing1", "isOn"), self.UI.getAttribute("punishing2", "isOn")}
+	local severe = {self.UI.getAttribute("severe1", "isOn"), self.UI.getAttribute("severe2", "isOn")}
+	local hit =  {self.UI.getValue("hit1"), self.UI.getValue("hit2")}
+	local lethalx = {self.UI.getValue("lethalx1text"), self.UI.getValue("lethalx2text")}
+	local normals = {0,0}
+	local crits = {0,0}
+
+
+	local objects = getAllObjects()
+	for index, object in pairs(objects) do
+		-- check for dice and in bounds
+		if object.getColorTint() == Color.fromString("Red") or object.getColorTint() == Color.fromString("Blue") then
+			if object.tag == "Dice" then
+				if checkBoundsX(self, object) and checkBoundsZ(self, object) then
+
+					-- check the player color
+					local player = BLUE_PLAYER
+					if object.getColorTint() == Color.fromString("Red") then
+						player = RED_PLAYER
+					end
+
+					-- check the hit type
+					if tostring(object.getValue()) >= lethalx[player] then
+						crits[player] = crits[player] + 1
+					elseif tostring(object.getValue()).."+" >= hit[player] then
+						normals[player] = normals[player] + 1
+					end
+				end
+			end
+		end
+	end -- for
+
+for i=1,2 do
+	self.UI.setValue("normals"..tostring(i), normals[i])
+	self.UI.setValue("crits"..tostring(i), crits[i])
+end
+
+end -- fight
+
 function spawnDice1()
   spawnDice(1)
 end
@@ -204,8 +253,9 @@ function spawnDice(id)
     newDice.setColorTint(COLOR_TABLE[id])
     newDice.addToPlayerSelection(COLOR_TABLE[id])
   end
+end -- spawnDice(id)
 
-end
+
 
 -- END OF BUTTON FUNCTION CALLS --
 -- END OF FUNCTIONS
