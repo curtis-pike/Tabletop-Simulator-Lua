@@ -13,11 +13,11 @@
 </GridLayout>
 
 <GridLayout height="1" width="1" position="-140 -100 -10" cellSize="100 15" spacing="5" constraint="FixedColumnCount" constraintCount="1" rotation="0 0 180">
-  <Toggle id="brutal1" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
-  <Toggle id="shock1" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
-  <Toggle id="rending1" textColor="rgba(.2,.2,.2,1.0)">Rending</Toggle>
-  <Toggle id="punishing1" textColor="rgba(.2,.2,.2,1.0)">Punishing</Toggle>
-  <Toggle id="severe1" textColor="rgba(.2,.2,.2,1.0)">Severe</Toggle>
+  <Toggle id="brutal1" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
+  <Toggle id="shock1" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
+  <Toggle id="rending1" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Rending</Toggle>
+  <Toggle id="punishing1" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Punishing</Toggle>
+  <Toggle id="severe1" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Severe</Toggle>
 </GridLayout>
 
 <Slider onValueChanged="modifyLethalX1" id="lethalx1" width="100" height="20" position="-190 20 -10" minValue="1" maxValue="6" value="6" wholeNumbers="true" rotation="0 0 180"></Slider>
@@ -26,11 +26,11 @@
 
 
 <GridLayout height="1" width="1" position="239 -100 -10" cellSize="86 15" spacing="5" constraint="FixedColumnCount" constraintCount="1" rotation="0 0 180">
-  <Toggle id="brutal2" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
-  <Toggle id="shock2" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
-  <Toggle id="rending2" textColor="rgba(.2,.2,.2,1.0)">Rending</Toggle>
-  <Toggle id="punishing2" textColor="rgba(.2,.2,.2,1.0)">Punishing</Toggle>
-  <Toggle id="severe2" textColor="rgba(.2,.2,.2,1.0)">Severe</Toggle>
+  <Toggle id="brutal2" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Brutal</Toggle>
+  <Toggle id="shock2" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Shock</Toggle>
+  <Toggle id="rending2" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Rending</Toggle>
+  <Toggle id="punishing2" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Punishing</Toggle>
+  <Toggle id="severe2" onValueChanged="modifyWeaponRule" isOn="False" textColor="rgba(.2,.2,.2,1.0)">Severe</Toggle>
 </GridLayout>
 
 <Slider onValueChanged="modifyLethalX2" id="lethalx2" width="100" height="20" position="190 20 -10" minValue="1" maxValue="6" value="6" wholeNumbers="true" rotation="0 0 180"></Slider>

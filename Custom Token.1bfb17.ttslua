@@ -49,6 +49,15 @@ local ROTATION_TABLE = {
 	{90, 0, 0}, --6
 }
 
+local BRUTAL_INDEX = 1
+local SHOCK_INDEX = 2
+local RENDING_INDEX = 3
+local PUNISHING_INDEX = 4
+local SEVERE_INDEX = 5
+
+local WEAPON_RULES_TABLE = {"brutal", "shock", "rending", "punishing", "severe"}
+local weapon_rules = {{false, false, false, false, false}, {false, false, false, false, false}}
+
 
 -- END OF GLOBALS --
 
@@ -92,6 +101,11 @@ function addValueToStat(player, click, id, stat_index, value)
 		self.UI.setValue(str, math.min(MAX_TABLE[stat_index], math.max(new, MIN_TABLE[stat_index])).."+")
 	end
 end -- addValueToStat()
+
+
+function modifyWeaponRule(player, isOn, id, a)
+	self.UI.setAttribute(id, "isOn", isOn)
+end
 
 function modifyAttacks1(player, click)
   addValueToStat(player, click, BLUE_PLAYER, ATTACK_INDEX, 1)
@@ -180,40 +194,65 @@ function fight(player, click)
 	local rending = {self.UI.getAttribute("rending1", "isOn"), self.UI.getAttribute("rending2", "isOn")}
 	local punishing = {self.UI.getAttribute("punishing1", "isOn"), self.UI.getAttribute("punishing2", "isOn")}
 	local severe = {self.UI.getAttribute("severe1", "isOn"), self.UI.getAttribute("severe2", "isOn")}
+	local attacks = {tonumber(self.UI.getValue("attacks1")), tonumber(self.UI.getValue("attacks2"))}
 	local hit =  {self.UI.getValue("hit1"), self.UI.getValue("hit2")}
-	local lethalx = {self.UI.getValue("lethalx1text"), self.UI.getValue("lethalx2text")}
+	local lethalx = {tonumber(self.UI.getValue("lethalx1text")), tonumber(self.UI.getValue("lethalx2text"))}
 	local normals = {0,0}
 	local crits = {0,0}
 
+	local tab = {brutal, shock, rending, punishing, severe, attacks, hit, lethalx}
+	for _, item in ipairs(tab) do
+		print("Blue:" .. tostring(item[1]) .. " | Red:" .. tostring(item[2]))
+	end
 
 	local objects = getAllObjects()
+	-- get initial dice rolls
 	for index, object in pairs(objects) do
 		-- check for dice and in bounds
 		if object.getColorTint() == Color.fromString("Red") or object.getColorTint() == Color.fromString("Blue") then
 			if object.tag == "Dice" then
 				if checkBoundsX(self, object) and checkBoundsZ(self, object) then
-
 					-- check the player color
 					local player = BLUE_PLAYER
 					if object.getColorTint() == Color.fromString("Red") then
 						player = RED_PLAYER
 					end
-
 					-- check the hit type
-					if tostring(object.getValue()) >= lethalx[player] then
+					if object.getValue() >= lethalx[player] then
 						crits[player] = crits[player] + 1
-					elseif tostring(object.getValue()).."+" >= hit[player] then
+					elseif object.getValue().."+" >= hit[player] then
 						normals[player] = normals[player] + 1
 					end
-				end
-			end
-		end
-	end -- for
 
-for i=1,2 do
-	self.UI.setValue("normals"..tostring(i), normals[i])
-	self.UI.setValue("crits"..tostring(i), crits[i])
-end
+				end -- if checkBounds
+			end -- if object.tag == "Dice" then
+		end -- if object.getColorTint()
+	end -- 	for index, object in pairs(objects) do
+
+	-- crit and hit modifying weapon rules
+	for player=1,2 do
+
+		-- severe (if no crit, a normal becomes a crit)
+		if severe[player] == "True" and crits[player] == 0 and normals[player] > 0 then
+			normals[player] = normals[player] - 1
+			crits[player] = 1
+		end
+		-- rending (if any crit and a normal, a normal becomes a crit)
+		if rending[player] == "True" and crits[player] > 0 and normals[player] > 0 then
+			normals[player] = normals[player] - 1
+			crits[player] = crits[player] + 1
+		end
+		-- punishing (if any crit, a fail becomes a normal)
+		if punishing[player] == "True" and normals[player]+crits[player] < attacks[player] and crits[player] > 0 then
+			normals[player] = normals[player] + 1
+		end
+
+	end -- 	for player=1,2 do
+
+	for player=1,2 do
+		self.UI.setValue("normals"..tostring(player), normals[player])
+		self.UI.setValue("crits"..tostring(player), crits[player])
+	end -- 	for player=1,2 do
 
 end -- fight
 

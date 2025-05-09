@@ -34,7 +34,7 @@ function onObjectEnterContainer(container, enter_object)
 		Wait.time(
 			function()
 				self.takeObject({guid=enter_guid, smooth=false, position={0,-10,0}})
-			end, 1
+			end, 0.7
 		)
 		Wait.time(
 			function()
@@ -66,10 +66,11 @@ end
 -- spawn new dice based on the values in the result tables
 function spawnNewDice()
 	for i=1,2 do
+		local message = ""
 		for number=1,6 do
 			local count = diceResultsTableTable[i][number]
 			-- reset parameters
-			local newparams = {type="Die_6", position=pos, smooth=false, rotation={0,0,0}}
+			local newparams = {type="Die_6", position=pos, rotation={0,0,0}}
 			-- set the x value to the roll result
 			newparams.rotation = ROTATION_TABLE[number]
 			-- however many times that result got rolled
@@ -78,8 +79,14 @@ function spawnNewDice()
 				diceResultsTableTable[i][number] = diceResultsTableTable[i][number] - 1
 				local newDice = spawnObject(newparams)
 				newDice.setColorTint(Color.fromString(COLOR_TABLE[i]))
+				message = message .. tostring(number) .. ", "
 			end -- for3
 		end -- for2
+		if message ~= "" then
+			local time = os.date("%X")
+			message = "(" .. time .. ")" .. " " .. message
+			printToAll(string.sub(message, 1, -3), Color.fromString(COLOR_TABLE[i]))
+		end
 	end -- for1
 
 end -- function spawnNewDice()
